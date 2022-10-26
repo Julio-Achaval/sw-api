@@ -1,0 +1,19 @@
+{
+  "name": "sw-api",
+  "version": "1.0.0",
+  "description": "planets and people",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "starwars"
+  ],
+  "author": "JulioAchavalVinuesa",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.2.10"
+  }
+}
