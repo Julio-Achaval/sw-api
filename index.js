@@ -11,7 +11,7 @@ app.get('/people', async function (req, res) {
     const people = await getPeople(sortBy);
     res.status(200).send(people);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(500).send(error);
   }
 });
 
@@ -21,7 +21,7 @@ app.get('/planets', async function (_req, res) {
     const planets = await getPlanets();
     res.status(200).send(planets);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(500).send(error);
   }
 });
 

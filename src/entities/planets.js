@@ -33,19 +33,27 @@ const getPlanetResidentsbyName = async (residents) => {
 const getAllPagePlanets = async () => {
 
   let planets = [];
-  let page = 1;
-  let pagedplanets;
+  let promisedPlanets = [];
   console.log("Processing pages...");
-    do {
-      pagedplanets = await getPlanetsByPage(page);
-      planets = planets.concat(pagedplanets.results);
-      page++;
-    } while (pagedplanets.next !== null);
-  
-    console.log('Pages processed');
-  
-    return planets;
-  
+
+  const firstPlanetsPage = await getPlanetsByPage(1);
+  planets.concat(firstPlanetsPage.results);
+  const count = parseInt(firstPlanetsPage.count);
+  const pages = count % 10 === 0 ? Math.trunc(count / 10) : Math.trunc(count / 10) + 1;
+
+  for (let page = 2; page < pages + 1 ; page++) {
+    promisedPlanets.push(getPlanetsByPage(page));
+  }
+
+  promisedPlanets = await Promise.all(promisedPlanets);
+
+  promisedPlanets.forEach(page => {
+    planets = planets.concat(page.results);
+  });
+
+  console.log('Pages processed');
+
+  return planets;
 }
 
 const getPlanetsByPage = async (page) => {

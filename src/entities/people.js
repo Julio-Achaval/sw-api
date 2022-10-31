@@ -41,17 +41,27 @@ const sortPeopleBy = (people, sortBy) => {
 }
 
 const getAllPagePeople = async () => {
-
   let people = [];
-  let page = 1;
-  let pagedpeople;
+  let promisedPeople = [];
   console.log("Processing pages...");
-  do {
-    pagedpeople = await getPeopleByPage(page);
-    people = people.concat(pagedpeople.results);
-    page++;
-  } while (pagedpeople.next !== null);
+
+  const firstPeoplePage = await getPeopleByPage(1);
+  people.concat(firstPeoplePage.results);
+  const count = parseInt(firstPeoplePage.count);
+  const pages = count % 10 === 0 ? Math.trunc(count / 10) : Math.trunc(count / 10) + 1;
+
+  for (let page = 2; page < pages + 1 ; page++) {
+    promisedPeople.push(getPeopleByPage(page));
+  }
+
+  promisedPeople = await Promise.all(promisedPeople);
+
+  promisedPeople.forEach(page => {
+    people = people.concat(page.results);
+  });
+
   console.log('Pages processed');
+
   return people;
 }
 
